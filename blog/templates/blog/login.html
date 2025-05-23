@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - Omojay Blog</title>
+    <link rel="stylesheet" href="{% static 'blog/login.css' %}" />
+</head>
+<body>
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="message" id="typewriter">
+            <h1><span id="type-text"></span><span class="cursor"></span></h1>
+        </div>
+
+        <div class="login-form" id="login-form">
+            <h2>Login</h2>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" required autocomplete="username" />
+
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required
+                        autocomplete="current-password"
+                    />
+                    <label class="show-password-label">
+                        <input type="checkbox" id="show-password" />
+                        Show Password
+                    </label>
+                </div>
+
+                <button type="submit">Login</button>
+
+                <p class="signup-link">
+                    Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const text = "WELCOME TO OMOJAY BLOG";
+        const typeText = document.getElementById("type-text");
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                typeText.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+
+        window.onload = () => {
+            typeWriter();
+
+            const showPassCheckbox = document.getElementById("show-password");
+            const passwordInput = document.getElementById("password");
+
+            showPassCheckbox.addEventListener("change", () => {
+                passwordInput.type = showPassCheckbox.checked ? "text" : "password";
+            });
+        };
+    </script>
+</body>
+</html>

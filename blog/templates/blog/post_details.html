@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="{% static 'blog/post_details.css' %}">
+</head>
+<body>
+
+    <div class="post-container">
+        <h1>{{ post.title }}</h1>
+        <p class="meta">By {{ post.author }} | {{ post.date_posted }}</p>
+
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post Image">
+        {% endif %}
+
+        <hr>
+
+        <div class="comments">
+            <h2>{{ post.comments.count }} Comments</h2>
+
+            {% for comment in comments %}
+                <div class="comment">
+                    <strong>{{ comment.name }}</strong> ({{ comment.email }})<br>
+                    <small>{{ comment.date_commented }}</small>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% empty %}
+                <p>No comments yet. Be the first to comment!</p>
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <h3>Add a Comment</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Submit Comment</button>
+        </form>
+    </div>
+
+    <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+
+</body>
+</html>
